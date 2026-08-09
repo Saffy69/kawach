@@ -8,6 +8,7 @@ import { SiteLayout } from '@/components/layout/SiteLayout';
 import { LandingPage } from '@/pages/Landing';
 import { ResponsePage } from '@/pages/Response';
 import { EvidencePage } from '@/pages/Evidence';
+import { ExposureScanPage } from '@/pages/ExposureScan';
 import { ReportPage } from '@/pages/Report';
 import { ResourcesPage } from '@/pages/Resources';
 import { PrivacyPage } from '@/pages/Privacy';
@@ -26,6 +27,7 @@ function App() {
                 <Route path="/" element={<LandingPage />} />
                 <Route path="/response" element={<ResponsePage />} />
                 <Route path="/evidence" element={<EvidencePage />} />
+                <Route path="/scan" element={<ExposureScanPage />} />
                 <Route path="/report" element={<ReportPage />} />
                 <Route path="/resources" element={<ResourcesPage />} />
                 <Route path="/privacy" element={<PrivacyPage />} />

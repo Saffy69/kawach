@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, NavLink, Outlet, useLocation } from 'react-router-dom';
-import { FileText, FolderLock, Home, MessageSquare, Phone, ShieldCheck, Trash2 } from 'lucide-react';
+import { FileText, FolderLock, Globe2, Home, MessageSquare, Phone, ShieldCheck, Trash2 } from 'lucide-react';
 import { EmergencyButton, Wordmark } from '@/components/shared';
 import { AmbientBackground } from '@/components/AmbientBackground';
 import { ThemeToggle } from '@/components/ThemeToggle';
@@ -13,6 +13,7 @@ const NAV = [
   { to: '/', key: 'home' as const, icon: Home, end: true },
   { to: '/response', key: 'response' as const, icon: MessageSquare, end: false },
   { to: '/evidence', key: 'evidence' as const, icon: FolderLock, end: false },
+  { to: '/scan', key: 'scan' as const, icon: Globe2, end: false },
   { to: '/report', key: 'report' as const, icon: FileText, end: false },
   { to: '/resources', key: 'resources' as const, icon: Phone, end: false },
 ];
@@ -140,7 +141,7 @@ export function SiteLayout() {
         aria-label={language === 'ne' ? 'मुख्य' : 'Main'}
       >
         <div className="mx-auto flex max-w-lg items-stretch justify-around px-1">
-          {NAV.map((item) => {
+          {NAV.filter((item) => item.key !== 'scan').map((item) => {
             const Icon = item.icon;
             return (
               <NavLink

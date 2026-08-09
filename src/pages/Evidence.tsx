@@ -5,6 +5,7 @@ import {
   ArrowRight,
   Camera,
   Fingerprint,
+  Globe2,
   ImageOff,
   Lock,
   ShieldCheck,
@@ -35,6 +36,7 @@ const COPY = {
     privateImage: 'Private image', noOpenTitle: 'We are not going to ask you to open that file.', noOpenText: 'Because someone under 18 is involved, handling the image at all — even to fingerprint it on this device — is not something we will ask you to do. NCMEC Take It Down is built for exactly this and works without you sending the image to anyone.', takeDown: 'Go to Take It Down and Child Helpline', protection: 'Private image protection', stays: 'Your image stays on this device', fingerprintTitle: 'We create a fingerprint, not a copy.',
     steps: ['Device only', 'SHA-256', 'Hash string', 'Image discarded'], hashLabel: 'Hash', imageLabel: 'Image', retainedLabel: 'Retained', privacy: 'Kawach does not upload your intimate image to a server and does not send it to any AI model. The file is read in this browser, a SHA-256 hash is computed, and the file reference is cleared.', errorTitle: 'Could not create a fingerprint', hashImage: 'Hash image on this device', info: 'A SHA-256 fingerprint proves a specific file existed, unaltered, at a specific time. It is not a takedown request, and it cannot match re-encoded or cropped copies — the takedown services do that with their own perceptual hashing.', generated: 'Generated locally', reference: 'Reference cleared', hashOnly: 'Hash only', recorded: 'recorded', continue: 'Continue to report', help: 'See official help',
     saveError: 'Could not save on this device. Storage may be blocked.', savedToast: 'Screenshot saved on this device', fingerprintToast: 'Fingerprint created. The image was not stored.', insecure: 'This needs a secure (https) connection to hash safely on your device.', tooLarge: 'That file is larger than 25 MB. Try a smaller file.', unreadable: 'That file could not be read. Try selecting it again.', unknown: 'Something went wrong. Nothing was uploaded.',
+    exposureScan: 'Exposure scan demo', exposureScanText: 'See a simulated metadata-only review flow. It does not browse the internet or load images.',
   },
   ne: {
     stage: { reading: 'यस उपकरणमा फाइल पढिँदै…', hashing: 'SHA-256 गणना हुँदै…', clearing: 'फाइल सन्दर्भ हटाइँदै…' },
@@ -43,6 +45,7 @@ const COPY = {
     privateImage: 'निजी तस्बिर', noOpenTitle: 'हामी तपाईंलाई त्यो फाइल खोल्न भन्ने छैनौँ।', noOpenText: '१८ वर्षमुनिका व्यक्ति संलग्न भएकाले तस्बिरलाई यस उपकरणमै फिंगरप्रिन्ट बनाउन समेत चलाउनु पर्ने छैन। NCMEC Take It Down यही कामका लागि बनाइएको हो र तस्बिर कसैलाई पठाउनुपर्दैन।', takeDown: 'Take It Down र Child Helpline मा जानुहोस्', protection: 'निजी तस्बिर सुरक्षा', stays: 'तपाईंको तस्बिर यस उपकरणमै रहन्छ', fingerprintTitle: 'हामी प्रतिलिपि होइन, फिंगरप्रिन्ट बनाउँछौँ।',
     steps: ['उपकरणमा मात्र', 'SHA-256', 'ह्यास स्ट्रिङ', 'तस्बिर हटाइयो'], hashLabel: 'ह्यास', imageLabel: 'तस्बिर', retainedLabel: 'राखिएको', privacy: 'Kawach ले तपाईंको निजी तस्बिर सर्भरमा अपलोड गर्दैन र कुनै AI मोडलमा पठाउँदैन। फाइल यही ब्राउजरमा पढिन्छ, SHA-256 ह्यास गणना गरिन्छ र फाइल सन्दर्भ हटाइन्छ।', errorTitle: 'फिंगरप्रिन्ट बनाउन सकिएन', hashImage: 'यस उपकरणमा तस्बिरको ह्यास बनाउनुहोस्', info: 'SHA-256 फिंगरप्रिन्टले कुनै निश्चित फाइल निश्चित समयमा परिवर्तन नगरिएको अवस्थामा रहेको प्रमाणित गर्छ। यो हटाउने अनुरोध होइन र पुनः-एन्कोड वा काटिएका प्रतिलिपिसँग मिल्दैन — हटाउने सेवाहरूले आफ्नै perceptual hashing गर्छन्।', generated: 'स्थानीय रूपमा बनाइएको', reference: 'सन्दर्भ हटाइयो', hashOnly: 'ह्यास मात्र', recorded: 'अभिलेखित', continue: 'प्रतिवेदनमा जारी राख्नुहोस्', help: 'आधिकारिक सहायता हेर्नुहोस्',
     saveError: 'यस उपकरणमा सुरक्षित गर्न सकिएन। भण्डारण रोकिएको हुन सक्छ।', savedToast: 'स्क्रिनसट यस उपकरणमा सुरक्षित भयो', fingerprintToast: 'फिंगरप्रिन्ट बन्यो। तस्बिर सुरक्षित गरिएन।', insecure: 'यस उपकरणमा सुरक्षित रूपमा ह्यास बनाउन सुरक्षित (https) जडान चाहिन्छ।', tooLarge: 'यो फाइल २५ MB भन्दा ठूलो छ। सानो फाइल प्रयोग गर्नुहोस्।', unreadable: 'यो फाइल पढ्न सकिएन। फेरि चयन गर्नुहोस्।', unknown: 'केही समस्या भयो। केही पनि अपलोड भएन।',
+    exposureScan: 'एक्सपोजर स्क्यान डेमो', exposureScanText: 'कृत्रिम मेटाडाटा मात्र भएको समीक्षा प्रक्रिया हेर्नुहोस्। यसले इन्टरनेट ब्राउज वा तस्बिर खोल्दैन।',
   },
 } as const;
 
@@ -143,6 +146,21 @@ export function EvidencePage() {
         <h1 className="mt-2 text-3xl font-bold sm:text-4xl">{c.heading}</h1>
         <p className="mt-3 max-w-xl text-[15px] leading-relaxed text-ink-2">{c.intro}</p>
       </header>
+
+      <div className="mb-8">
+        <Link to="/scan">
+          <Card tone="brand" className="transition-colors hover:border-brand-bright/60">
+            <div className="flex items-start gap-3">
+              <Globe2 size={19} className="mt-0.5 shrink-0 text-brand-bright" aria-hidden="true" />
+              <div>
+                <h2 className="font-bold">{c.exposureScan}</h2>
+                <p className="mt-1 text-sm leading-relaxed text-ink-2">{c.exposureScanText}</p>
+              </div>
+              <ArrowRight size={17} className="ml-auto mt-1 shrink-0 text-brand-bright" aria-hidden="true" />
+            </div>
+          </Card>
+        </Link>
+      </div>
 
       {/* ================= A. Conversation evidence ================= */}
       <section className="mb-10">

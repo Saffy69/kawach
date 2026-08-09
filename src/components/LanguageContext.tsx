@@ -6,7 +6,7 @@ const KEY = 'kawach.language';
 
 const translations = {
   en: {
-    nav: { home: 'Home', response: 'Response', evidence: 'Evidence', report: 'Report', resources: 'Resources', privacy: 'Privacy' },
+    nav: { home: 'Home', response: 'Response', evidence: 'Evidence', scan: 'Exposure scan', report: 'Report', resources: 'Resources', privacy: 'Privacy' },
     language: 'नेपाली',
     languageLabel: 'Switch to Nepali',
     erase: 'Erase',
@@ -21,7 +21,7 @@ const translations = {
     takingYouThere: 'Taking you there…',
   },
   ne: {
-    nav: { home: 'गृहपृष्ठ', response: 'प्रतिक्रिया', evidence: 'प्रमाण', report: 'प्रतिवेदन', resources: 'स्रोतहरू', privacy: 'गोपनीयता' },
+    nav: { home: 'गृहपृष्ठ', response: 'प्रतिक्रिया', evidence: 'प्रमाण', scan: 'एक्सपोजर स्क्यान', report: 'प्रतिवेदन', resources: 'स्रोतहरू', privacy: 'गोपनीयता' },
     language: 'English',
     languageLabel: 'Switch to English',
     erase: 'मेटाउनुहोस्',
