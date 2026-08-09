@@ -83,6 +83,34 @@ Installable as a PWA. Once installed, the entire response flow — guidance, evi
 - Light and dark themes
 - Progress is always visible, so the user knows the process ends
 
+## Planned integrations
+
+The following are **designed and scoped but not yet shipped**. They are documented here so the intended architecture is clear.
+
+### Scrapy-based exposure scanning
+A Python [Scrapy](https://scrapy.org/) crawler running as a backend service, feeding the Exposure Scan UI that exists today. The intended design:
+
+- Scrapy spiders sweep public web indexes and image-hosting pages
+- A perceptual-hash comparison stage matches candidates against the complainant's reference hash
+- Only **metadata** — source, platform, timestamp, confidence — returns to the client
+- Matched imagery is never fetched into, stored by, or displayed in the app; the UI's censored result cards are the permanent presentation format
+
+The current Exposure Scan screen is the finished client for this service and renders sample reference cards until the crawler is connected.
+
+### StopNCII / NCMEC hash submission
+Perceptual-hash (PDQ-family) generation on-device, submitted to StopNCII.org and NCMEC Take It Down so partner platforms can block matching uploads.
+
+Two notes on the current state:
+
+- Kavach's existing fingerprint is **SHA-256** — cryptographic, not perceptual. It proves a file existed unaltered at a point in time, which is what a complaint needs. It cannot match a re-encoded or cropped copy.
+- StopNCII and Take It Down perform their own on-device perceptual hashing inside their own flows, and there is no public submission API. Until a supported integration path exists, Kavach links users directly into those official flows rather than claiming to submit on their behalf.
+
+### AI-assisted drafting
+A serverless proxy for LLM-assisted complaint drafting, holding the API key server-side. The client already posts structured, enum-only answers — never an image, never free text describing image content — and falls back to a local template whenever the service is unreachable, so the flow never dead-ends. The template path is what ships today.
+
+### Cyber Bureau submission
+There is no public API for filing with the Nepal Police Cyber Bureau. Kavach drafts the complaint and hands off to the official portal, email, and phone number. A direct filing integration would require an official partnership.
+
 ---
 
 ## Tech stack
@@ -190,9 +218,5 @@ Two things to know before opening a PR:
 Hotline numbers carry a verification date. If you add or change one, confirm it first and update the date.
 
 ---
-
-## Disclaimer
-
-Kavach is a response toolkit, not a substitute for the Cyber Bureau, a lawyer, or a counsellor. It does not file complaints on anyone's behalf. Verify hotline numbers before relying on them in an emergency.
 
 **If you are in immediate danger, call 100.**
