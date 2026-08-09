@@ -215,7 +215,6 @@ export function EmergencyHelpDrawer({
 
         {groups.map((group) => (
           <section key={group}>
-            <h3 className="k-label mb-2.5 font-sans">{copy.groups[group]}</h3>
             <div className="space-y-2">
               {resources
                 .filter((r) => r.group === group)

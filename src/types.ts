@@ -84,6 +84,23 @@ export interface CaseState {
   completedGuidance: boolean;
 }
 
+export type ReportReviewStatus = 'pending' | 'verified' | 'rejected';
+
+export interface LocalReportRecord {
+  id: string;
+  caseId: string;
+  submittedAt: string;
+  updatedAt: string;
+  status: ReportReviewStatus;
+  reportText: string;
+  answers: Answers;
+  fingerprintCount: number;
+  screenshotCount: number;
+  draftSource: ReportDraft['source'];
+  editedByVictim: boolean;
+  verificationNotes: string[];
+}
+
 /* -------------------------------------------------------------------------
    Decision tree
    ------------------------------------------------------------------------- */

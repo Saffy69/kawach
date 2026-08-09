@@ -1,4 +1,5 @@
 import { deleteDB, openDB, type IDBPDatabase } from 'idb';
+import type { LocalReportRecord, ReportReviewStatus } from '@/types';
 
 /**
  * IndexedDB store for CONVERSATION screenshots only.
@@ -12,8 +13,9 @@ import { deleteDB, openDB, type IDBPDatabase } from 'idb';
  */
 
 const DB_NAME = 'kawach-evidence';
-const STORE = 'screenshots';
-const DB_VERSION = 1;
+const SCREENSHOT_STORE = 'screenshots';
+const REPORT_STORE = 'reports';
+const DB_VERSION = 2;
 
 export interface ScreenshotRecord {
   id?: number;
@@ -29,8 +31,11 @@ function getDb(): Promise<IDBPDatabase> {
   if (!dbPromise) {
     dbPromise = openDB(DB_NAME, DB_VERSION, {
       upgrade(db) {
-        if (!db.objectStoreNames.contains(STORE)) {
-          db.createObjectStore(STORE, { keyPath: 'id', autoIncrement: true });
+        if (!db.objectStoreNames.contains(SCREENSHOT_STORE)) {
+          db.createObjectStore(SCREENSHOT_STORE, { keyPath: 'id', autoIncrement: true });
+        }
+        if (!db.objectStoreNames.contains(REPORT_STORE)) {
+          db.createObjectStore(REPORT_STORE, { keyPath: 'id' });
         }
       },
     });
@@ -59,7 +64,7 @@ export async function addScreenshot(
       addedAt: new Date().toISOString(),
       sizeBytes: file.size,
     };
-    const id = await db.add(STORE, record);
+    const id = await db.add(SCREENSHOT_STORE, record);
     return { ...record, id: id as number };
   } catch {
     return null;
@@ -69,7 +74,7 @@ export async function addScreenshot(
 export async function listScreenshots(): Promise<ScreenshotRecord[]> {
   try {
     const db = await getDb();
-    return (await db.getAll(STORE)) as ScreenshotRecord[];
+    return (await db.getAll(SCREENSHOT_STORE)) as ScreenshotRecord[];
   } catch {
     return [];
   }
@@ -78,7 +83,58 @@ export async function listScreenshots(): Promise<ScreenshotRecord[]> {
 export async function deleteScreenshot(id: number): Promise<boolean> {
   try {
     const db = await getDb();
-    await db.delete(STORE, id);
+    await db.delete(SCREENSHOT_STORE, id);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+export async function saveLocalReport(report: LocalReportRecord): Promise<boolean> {
+  try {
+    const db = await getDb();
+    await db.put(REPORT_STORE, report);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+export async function listLocalReports(): Promise<LocalReportRecord[]> {
+  try {
+    const db = await getDb();
+    const reports = await db.getAll(REPORT_STORE);
+    return (reports as LocalReportRecord[]).sort((a, b) => b.updatedAt.localeCompare(a.updatedAt));
+  } catch {
+    return [];
+  }
+}
+
+export async function updateLocalReportStatus(
+  id: string,
+  status: ReportReviewStatus,
+  verificationNotes: string[],
+): Promise<boolean> {
+  try {
+    const db = await getDb();
+    const report = await db.get(REPORT_STORE, id) as LocalReportRecord | undefined;
+    if (!report) return false;
+    await db.put(REPORT_STORE, {
+      ...report,
+      status,
+      verificationNotes,
+      updatedAt: new Date().toISOString(),
+    });
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+export async function deleteLocalReport(id: string): Promise<boolean> {
+  try {
+    const db = await getDb();
+    await db.delete(REPORT_STORE, id);
     return true;
   } catch {
     return false;

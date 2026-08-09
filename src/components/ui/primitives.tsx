@@ -130,10 +130,13 @@ export function Card({
 export function SectionLabel({
   children,
   className = '',
+  labeled = false,
 }: {
   children: ReactNode;
   className?: string;
+  labeled?: boolean;
 }) {
+  if (!labeled) return null;
   return <p className={`k-label ${className}`}>{children}</p>;
 }
 

@@ -72,6 +72,13 @@ export function DashboardPage() {
         <h2 className="mb-5 text-base font-bold">{copy.status}</h2>
         <Timeline steps={steps} />
       </Card>
+
+      <Card className="mt-6 border-line-strong">
+        <div className="flex items-start justify-between gap-3">
+          <div><h2 className="font-bold">Report management</h2><p className="mt-1 text-sm text-ink-2">Review and organize submitted cases.</p></div>
+          <Link to="/admin"><Button variant="secondary" size="sm">Open</Button></Link>
+        </div>
+      </Card>
     </div>
   );
 }

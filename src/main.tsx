@@ -13,6 +13,7 @@ import { ReportPage } from '@/pages/Report';
 import { ResourcesPage } from '@/pages/Resources';
 import { PrivacyPage } from '@/pages/Privacy';
 import { DashboardPage } from '@/pages/Dashboard';
+import { AdminPage } from '@/pages/Admin';
 import '@/styles/index.css';
 
 function App() {
@@ -32,6 +33,7 @@ function App() {
                 <Route path="/resources" element={<ResourcesPage />} />
                 <Route path="/privacy" element={<PrivacyPage />} />
                 <Route path="/dashboard" element={<DashboardPage />} />
+                <Route path="/admin" element={<AdminPage />} />
                 <Route path="*" element={<LandingPage />} />
               </Route>
             </Routes>

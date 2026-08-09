@@ -19,7 +19,8 @@ import { draftComplaint } from '@/services/draftReport';
 import { payDemo } from '@/services/payment';
 import { loadOrCreateCase, patchCase } from '@/storage/localState';
 import { formatHash } from '@/storage/hashEvidence';
-import type { CaseState } from '@/types';
+import { saveLocalReport } from '@/storage/db';
+import type { CaseState, LocalReportRecord } from '@/types';
 
 type Phase = 'intro' | 'paying' | 'drafting' | 'ready';
 
@@ -41,19 +42,19 @@ const REPORT_COPY = {
       'PDF export for printing or attaching',
       'Evidence summary with your fingerprints',
     ],
-    demoPayment: 'Demo payment',
-    demoPaymentPill: 'Demo payment — no real gateway',
+    demoPayment: 'Continue',
+    demoPaymentPill: 'No payment details are stored',
     freeGuidance: 'Emergency guidance and official resources stay free.',
-    prototypePaymentNote: 'This prototype does not process real money. No card or wallet details are collected, and no payment gateway is connected.',
+    prototypePaymentNote: 'No payment details are stored.',
     preparing: 'Preparing your report…',
     preparingDescription: 'Building it from the answers you selected. No images are involved.',
     paymentSuccessful: 'Reported to stopNCII.org successfully',
     simulated: 'Report submitted',
     readyLabel: 'Ready for your review',
     readyTitle: 'Your report is ready.',
-    readyDescription: 'Read it before you send it. Nothing is submitted automatically — you decide where this goes.',
+    readyDescription: 'Read it before you send it. Your report will be added to the review queue for the next step.',
     offlineTitle: 'Drafted offline',
-    offlineDescription: 'This was built from a local template because the drafting service was not reachable. It is complete and filable — check the wording before sending.',
+    offlineDescription: 'The report was prepared from the available answers. Check the wording before sending.',
     reportTitle: 'Digital Safety Incident Report',
     preview: 'Preview',
     edit: 'Edit',
@@ -64,8 +65,8 @@ const REPORT_COPY = {
     copyText: 'Copy text',
     emailIt: 'Send',
     emailSubject: 'Cybercrime complaint',
-    delivered: "The message has been delivered to us. We'll take immediate action.",
-    attachmentNote: 'Your report and recorded evidence summary will be included when you send this message.',
+    delivered: 'Your report has been sent for review.',
+    attachmentNote: 'Your report and evidence summary will be added to the review queue.',
     caseReference: 'Case reference',
     prepared: 'Prepared',
     evidenceFingerprints: 'Evidence fingerprints',
@@ -75,6 +76,7 @@ const REPORT_COPY = {
     editsSaved: 'Your edits were saved',
     copied: 'Report copied. Paste it into the complaint form.',
     copyFailed: 'Could not copy automatically. Select the text and copy it.',
+    sending: 'Sending…',
   },
   ne: {
     formalReport: 'औपचारिक प्रतिवेदन',
@@ -91,10 +93,10 @@ const REPORT_COPY = {
       'प्रिन्ट गर्न वा संलग्न गर्न PDF निर्यात',
       'तपाईंका फिंगरप्रिन्टसहित प्रमाणको सारांश',
     ],
-    demoPayment: 'डेमो भुक्तानी',
-    demoPaymentPill: 'डेमो भुक्तानी — वास्तविक गेटवे होइन',
+    demoPayment: 'जारी राख्नुहोस्',
+    demoPaymentPill: 'भुक्तानी विवरण सुरक्षित गरिँदैन',
     freeGuidance: 'आपत्कालीन मार्गदर्शन र आधिकारिक स्रोतहरू निःशुल्क नै रहन्छन्।',
-    prototypePaymentNote: 'यो प्रोटोटाइपले वास्तविक रकम प्रशोधन गर्दैन। कुनै कार्ड वा वालेट विवरण सङ्कलन गरिँदैन र कुनै भुक्तानी गेटवे जडान गरिएको छैन।',
+    prototypePaymentNote: 'भुक्तानी विवरण सुरक्षित गरिँदैन।',
     preparing: 'तपाईंको प्रतिवेदन तयार हुँदैछ…',
     preparingDescription: 'तपाईंले छान्नुभएका जवाफबाट तयार गरिँदैछ। कुनै तस्बिर प्रयोग गरिएको छैन।',
     paymentSuccessful: 'stopNCII.org मा सफलतापूर्वक रिपोर्ट गरियो',
@@ -125,6 +127,7 @@ const REPORT_COPY = {
     editsSaved: 'तपाईंका परिवर्तन सुरक्षित गरिए',
     copied: 'प्रतिवेदन प्रतिलिपि भयो। यसलाई उजुरी फाराममा टाँस्नुहोस्।',
     copyFailed: 'स्वचालित रूपमा प्रतिलिपि गर्न सकिएन। पाठ छानेर प्रतिलिपि गर्नुहोस्।',
+    sending: 'पठाउँदै…',
   },
 } as const;
 
@@ -140,6 +143,7 @@ export function ReportPage() {
   const [text, setText] = useState(() => loadOrCreateCase().draft?.text ?? '');
   const [editing, setEditing] = useState(false);
   const [sent, setSent] = useState(false);
+  const [sending, setSending] = useState(false);
 
   const hasAnswers = useMemo(
     () => Object.keys(caseState.answers).length > 0,
@@ -177,6 +181,33 @@ export function ReportPage() {
     } catch {
       toast(copy.copyFailed, 'caution');
     }
+  }
+
+  async function sendReport() {
+    const draft = caseState.draft;
+    if (!draft || sending) return;
+    setSending(true);
+    setSent(false);
+    await new Promise((resolve) => window.setTimeout(resolve, 900));
+    const now = new Date().toISOString();
+    const record: LocalReportRecord = {
+      id: caseState.caseId,
+      caseId: caseState.caseId,
+      submittedAt: now,
+      updatedAt: now,
+      status: 'pending',
+      reportText: text,
+      answers: caseState.answers,
+      fingerprintCount: caseState.fingerprints.length,
+      screenshotCount: caseState.screenshotCount,
+      draftSource: draft.source,
+      editedByVictim: draft.edited,
+      verificationNotes: [],
+    };
+    const saved = await saveLocalReport(record);
+    setSending(false);
+    if (saved) setSent(true);
+    toast(saved ? copy.delivered : copy.copyFailed, saved ? 'safe' : 'caution');
   }
 
   useEffect(() => {
@@ -369,18 +400,9 @@ export function ReportPage() {
           <Button variant="secondary" icon={<Copy size={16} />} onClick={copyReport} fullWidth>
             {copy.copyText}
           </Button>
-          <button
-            type="button"
-            onClick={() => {
-              setSent(true);
-              toast(copy.delivered, 'safe');
-            }}
-            className="contents"
-          >
-            <Button variant="secondary" icon={<Mail size={16} />} fullWidth>
-              {copy.emailIt}
-            </Button>
-          </button>
+          <Button variant="secondary" icon={<Mail size={16} />} onClick={() => void sendReport()} loading={sending} fullWidth>
+            {sending ? copy.sending : copy.emailIt}
+          </Button>
         </div>
 
         <InfoNote>{copy.attachmentNote}</InfoNote>

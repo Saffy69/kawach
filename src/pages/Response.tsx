@@ -122,9 +122,6 @@ export function ResponsePage() {
       </div>
 
         <div className="overflow-hidden rounded-2xl border border-line-strong bg-surface shadow-mid">
-          <div className="border-b border-line bg-surface-2/60 px-4 py-3 sm:px-6">
-            <p className="k-label text-ink-3">{language === 'ne' ? 'सुरक्षित प्रतिक्रिया मार्गदर्शन' : 'Guided safety response'}</p>
-          </div>
           <div className="divide-y divide-line/70">
             {turns.map((turn, i) => {
               const node = localizeNode(turn.node, language);

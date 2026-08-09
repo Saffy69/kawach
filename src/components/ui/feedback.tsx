@@ -31,10 +31,12 @@ export function TrustIndicator({
   label,
   value,
   tone = 'safe',
+  labeled = false,
 }: {
   label: string;
   value: string;
   tone?: Tone;
+  labeled?: boolean;
 }) {
   const s = TONE_STYLES[tone];
   return (
@@ -46,7 +48,7 @@ export function TrustIndicator({
         {TONE_ICONS[tone]}
       </span>
       <div className="min-w-0">
-        <p className="k-label mb-0.5">{label}</p>
+        {labeled && <p className="k-label mb-0.5">{label}</p>}
         <p className={`text-sm font-semibold ${s.text}`}>{value}</p>
       </div>
     </div>
@@ -101,7 +103,6 @@ export function ProgressIndicator({ step, total }: { step: number; total: number
   const label = language === 'ne' ? `चरण ${step} / ${safeTotal}` : `Step ${step} of ${safeTotal}`;
   return (
     <div className="flex items-center gap-3">
-      <span className="k-label whitespace-nowrap">{label}</span>
       <div
         className="flex h-1.5 flex-1 gap-1"
         role="progressbar"

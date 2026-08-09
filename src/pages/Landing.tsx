@@ -145,8 +145,6 @@ function Hero() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
           >
-            <SectionLabel>{c("Nepal's digital safety response kit")}</SectionLabel>
-
             <h1 className="mt-4 text-[40px] font-bold leading-[1.08] sm:text-[54px]">
               {c('Take the next')}
               <br />
@@ -261,7 +259,7 @@ function ImmediateHelp() {
   return (
     <Slide id="help" className="border-t border-line bg-surface/60">
       <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-28">
-        <SectionLabel>{c('If this is happening right now')}</SectionLabel>
+        <SectionLabel labeled>{c('If this is happening right now')}</SectionLabel>
         <h2 className="mt-3 max-w-xl text-[32px] font-bold sm:text-[38px]">
           {c('Three things that help immediately.')}
         </h2>
@@ -299,7 +297,7 @@ function HowItWorks() {
   return (
     <Slide id="how" className="scroll-mt-20 border-t border-line">
       <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-28">
-        <SectionLabel>{c('How Kawach works')}</SectionLabel>
+        <SectionLabel labeled>{c('How Kawach works')}</SectionLabel>
         <h2 className="mt-3 max-w-xl text-[32px] font-bold sm:text-[38px]">
           {c('Four steps, and you can stop at any point.')}
         </h2>
@@ -337,7 +335,7 @@ function PrivacyArchitecture() {
     <Slide id="privacy" className="border-t border-line bg-surface/60">
       <div className="mx-auto grid max-w-6xl items-center gap-12 px-4 py-20 sm:px-6 sm:py-28 lg:grid-cols-2">
         <div>
-          <SectionLabel>{c('Privacy architecture')}</SectionLabel>
+          <SectionLabel labeled>{c('Privacy architecture')}</SectionLabel>
           <h2 className="mt-3 text-[32px] font-bold sm:text-[38px]">
             {c('Your image never leaves this device.')}
           </h2>
@@ -346,10 +344,10 @@ function PrivacyArchitecture() {
           </p>
 
           <div className="mt-7 grid gap-5 sm:grid-cols-2">
-            <TrustIndicator label={c('Image')} value={c('Never uploaded')} tone="safe" />
-            <TrustIndicator label={c('AI')} value={c('Never receives image')} tone="safe" />
-            <TrustIndicator label={c('Storage')} value={c('No intimate image stored')} tone="safe" />
-            <TrustIndicator label={c('Hash')} value={c('Only fingerprint retained')} tone="safe" />
+            <TrustIndicator labeled label={c('Image')} value={c('Never uploaded')} tone="safe" />
+            <TrustIndicator labeled label={c('AI')} value={c('Never receives image')} tone="safe" />
+            <TrustIndicator labeled label={c('Storage')} value={c('No intimate image stored')} tone="safe" />
+            <TrustIndicator labeled label={c('Hash')} value={c('Only fingerprint retained')} tone="safe" />
           </div>
 
           <div className="mt-7">
@@ -368,7 +366,7 @@ function PrivacyArchitecture() {
         </div>
 
         <Card tone="safe" className="shadow-mid lg:justify-self-end lg:max-w-md">
-          <SectionLabel className="text-safe-bright">{c('The full data path')}</SectionLabel>
+          <SectionLabel labeled className="text-safe-bright">{c('The full data path')}</SectionLabel>
           <div className="mt-5 space-y-2.5">
             {flow.map((f, i) => {
               const Icon = f.icon;
@@ -461,7 +459,7 @@ function Pricing() {
   return (
     <Slide id="pricing" className="border-t border-line bg-surface/60">
       <div className="mx-auto max-w-5xl px-4 py-20 sm:px-6 sm:py-28">
-        <SectionLabel>{c('Pricing')}</SectionLabel>
+        <SectionLabel labeled>{c('Pricing')}</SectionLabel>
         <h2 className="mt-3 max-w-xl text-[32px] font-bold sm:text-[38px]">
           {c('Help is free. The paperwork is NPR 5.')}
         </h2>
@@ -558,7 +556,7 @@ function Faq() {
   return (
     <Slide id="faq" className="border-t border-line">
       <div className="mx-auto max-w-3xl px-4 py-20 sm:px-6 sm:py-28">
-        <SectionLabel>{c('Questions')}</SectionLabel>
+        <SectionLabel labeled>{c('Questions')}</SectionLabel>
         <h2 className="mt-3 text-[32px] font-bold sm:text-[38px]">{c('Straight answers.')}</h2>
 
         <div className="mt-8 space-y-2.5">
