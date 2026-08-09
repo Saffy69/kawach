@@ -1,0 +1,490 @@
+@import 'tailwindcss';
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ==========================================================================
+   KAWACH THEME TOKENS
+   Semantic tokens adapt to light/dark through raw CSS variables below.
+   Nothing else in the codebase hardcodes a color.
+
+   Light: warm paper, one deep teal, no decoration. A person in a panic
+   should feel held, not marketed to.
+   Dark: warm charcoal — never near-black neon.
+   ========================================================================== */
+
+:root {
+  color-scheme: light;
+
+  --canvas: #f5f3ec;
+  --surface: #fdfcf9;
+  --surface-2: #edeae0;
+  --surface-3: #e1ddd0;
+
+  --ink: #222b34;
+  --ink-2: #47535f;
+  --ink-3: #6b7681;
+
+  --line: rgba(34, 43, 52, 0.13);
+  --line-strong: rgba(34, 43, 52, 0.26);
+
+  /* Brand: pine teal. Kavach means armour — calm protection, not alarm. */
+  --brand: #0e6b5c;
+  --brand-deep: #0a5346;
+  --brand-bright: #0c6455;
+
+  --safe: #1d7a46;
+  --safe-deep: #15603a;
+  --safe-bright: #176e3f;
+
+  --caution: #9a5602;
+  --caution-bright: #9a5602;
+
+  --danger: #b6392d;
+  --danger-deep: #9c2e23;
+  --danger-bright: #a83226;
+
+  --ring: #0c6455;
+
+  --hero-image-blend: multiply;
+  --hero-image-opacity: 0.64;
+  --hero-image-filter: grayscale(1) contrast(1.1) brightness(1.16);
+  --hero-image-mask: radial-gradient(ellipse 58% 74% at 54% 43%, black 34%, rgba(0, 0, 0, 0.9) 48%, rgba(0, 0, 0, 0.42) 68%, transparent 94%);
+
+  --elev-low: 0 1px 2px rgba(44, 38, 28, 0.06);
+  --elev-mid:
+    0 1px 2px rgba(44, 38, 28, 0.05), 0 6px 20px rgba(44, 38, 28, 0.09);
+  --elev-high:
+    0 2px 6px rgba(44, 38, 28, 0.07), 0 24px 48px -16px rgba(44, 38, 28, 0.24);
+}
+
+.dark {
+  color-scheme: dark;
+
+  --canvas: #131619;
+  --surface: #1b1f24;
+  --surface-2: #23282f;
+  --surface-3: #2d343d;
+
+  --ink: #e9ebee;
+  --ink-2: #9ba6b1;
+  --ink-3: #717d89;
+
+  --line: rgba(233, 235, 238, 0.1);
+  --line-strong: rgba(233, 235, 238, 0.2);
+
+  --brand: #0f8471;
+  --brand-deep: #189781;
+  --brand-bright: #4cc9b2;
+
+  --safe: #1c8a50;
+  --safe-deep: #23995b;
+  --safe-bright: #52d695;
+
+  --caution: #e2a54f;
+  --caution-bright: #e2a54f;
+
+  --danger: #c24636;
+  --danger-deep: #d05645;
+  --danger-bright: #f28271;
+
+  --ring: #4cc9b2;
+
+  --hero-image-blend: luminosity;
+  --hero-image-opacity: 0.88;
+  --hero-image-filter: grayscale(1) contrast(1.16) brightness(0.84);
+  --hero-image-mask: radial-gradient(ellipse 64% 80% at 54% 43%, black 44%, rgba(0, 0, 0, 0.97) 55%, rgba(0, 0, 0, 0.64) 70%, transparent 86%);
+
+  --elev-low: 0 1px 2px rgba(0, 0, 0, 0.35);
+  --elev-mid: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 24px rgba(0, 0, 0, 0.35);
+  --elev-high:
+    0 2px 8px rgba(0, 0, 0, 0.35), 0 28px 56px -16px rgba(0, 0, 0, 0.6);
+}
+
+@theme inline {
+  /* --- Surfaces -------------------------------------------------------- */
+  --color-canvas: var(--canvas);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-surface-3: var(--surface-3);
+
+  /* --- Text ------------------------------------------------------------ */
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-ink-3: var(--ink-3);
+
+  /* --- Lines ----------------------------------------------------------- */
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+
+  /* --- Brand ----------------------------------------------------------- */
+  --color-brand: var(--brand);
+  --color-brand-deep: var(--brand-deep);
+  --color-brand-bright: var(--brand-bright);
+
+  /* --- Semantic -------------------------------------------------------- */
+  --color-safe: var(--safe);
+  --color-safe-deep: var(--safe-deep);
+  --color-safe-bright: var(--safe-bright);
+  --color-caution: var(--caution);
+  --color-caution-bright: var(--caution-bright);
+  --color-danger: var(--danger);
+  --color-danger-deep: var(--danger-deep);
+  --color-danger-bright: var(--danger-bright);
+
+  /* --- Type ------------------------------------------------------------ */
+  /* Honest system stacks only — nothing is fetched (§2, §11). */
+  --font-sans:
+    ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto,
+    'Helvetica Neue', Arial, 'Noto Sans', sans-serif;
+  --font-display:
+    'Iowan Old Style', Georgia, Cambria, 'Times New Roman', Times, serif;
+  --font-mono:
+    ui-monospace, 'SF Mono', 'Cascadia Mono', 'Roboto Mono', Menlo, Consolas,
+    monospace;
+
+  /* --- Radius ---------------------------------------------------------- */
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
+
+  /* --- Elevation ------------------------------------------------------- */
+  --shadow-low: var(--elev-low);
+  --shadow-mid: var(--elev-mid);
+  --shadow-high: var(--elev-high);
+
+  /* --- Motion ---------------------------------------------------------- */
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out-soft: cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+/* ==========================================================================
+   BASE
+   ========================================================================== */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-height: 100dvh;
+  background-color: var(--canvas);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: 'tnum';
+  overflow-x: hidden;
+}
+
+/* Headings are set in the display face: civic and editorial, the opposite
+   of a landing-page template. */
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-display);
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+  margin: 0;
+}
+
+p {
+  text-wrap: pretty;
+  margin: 0;
+}
+
+/* Focus: always visible, never removed. Keyboard users are first-class. */
+:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+  border-radius: var(--radius-xs);
+}
+
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+::selection {
+  background: color-mix(in oklab, var(--brand) 28%, transparent);
+  color: var(--ink);
+}
+
+button {
+  font-family: inherit;
+  font-size: inherit;
+}
+
+/* Respect the OS setting. Someone in distress should not be given motion
+   they did not ask for. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ==========================================================================
+   UTILITIES
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   Ambient background
+   Three soft colour fields drift behind the whole app on long, looped
+   paths — presence, not decoration. Opacity stays low enough to read
+   through in both themes. The global prefers-reduced-motion rule above
+   freezes them completely.
+   -------------------------------------------------------------------------- */
+
+.hero-stage {
+  background:
+    radial-gradient(ellipse 58% 80% at 74% 48%, rgba(20, 89, 79, 0.28), transparent 66%),
+    linear-gradient(115deg, transparent 0 58%, rgba(5, 25, 25, 0.14) 58% 72%, transparent 72%),
+    var(--canvas);
+}
+
+.dark .hero-stage {
+  background:
+    radial-gradient(ellipse 60% 82% at 72% 50%, rgba(18, 84, 75, 0.34), transparent 68%),
+    linear-gradient(115deg, transparent 0 58%, rgba(5, 17, 18, 0.28) 58% 72%, transparent 72%),
+    #091313;
+}
+
+.hero-stage::before {
+  content: '';
+  position: absolute;
+  inset: 35% 20% 0 38%;
+  pointer-events: none;
+  background: radial-gradient(ellipse at center, rgba(10, 38, 35, 0.2), transparent 70%);
+  filter: blur(28px);
+}
+
+.hero-stage::after {
+  content: '';
+  position: absolute;
+  inset: 0 0 0 55%;
+  pointer-events: none;
+  opacity: 0.55;
+  background: repeating-linear-gradient(135deg, transparent 0 18px, rgba(76, 201, 178, 0.12) 19px 20px, transparent 21px 38px);
+  mask-image: linear-gradient(to right, transparent, black 42%, transparent 100%);
+}
+
+.hero-portrait {
+  opacity: var(--hero-image-opacity);
+  mix-blend-mode: var(--hero-image-blend);
+  filter: var(--hero-image-filter) drop-shadow(-28px 38px 35px rgba(0, 0, 0, 0.3));
+  -webkit-mask-image: var(--hero-image-mask);
+  mask-image: var(--hero-image-mask);
+}
+
+.k-circuit-pattern {
+  background-image:
+    linear-gradient(135deg, transparent 0 49%, rgba(61, 193, 168, 0.09) 49.2% 49.5%, transparent 49.7%),
+    linear-gradient(45deg, transparent 0 49%, rgba(61, 193, 168, 0.06) 49.2% 49.5%, transparent 49.7%);
+  background-size: 280px 280px, 340px 340px;
+  mask-image: radial-gradient(ellipse at center, black 30%, transparent 92%);
+}
+
+
+.k-drift {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(72px);
+  will-change: transform;
+  pointer-events: none;
+}
+
+.k-drift-a {
+  width: 46rem;
+  height: 46rem;
+  left: -14rem;
+  top: -16rem;
+  background: color-mix(in oklab, var(--brand) 10%, transparent);
+  animation: k-drift-a 48s var(--ease-in-out-soft) infinite alternate;
+}
+
+.k-drift-b {
+  width: 40rem;
+  height: 40rem;
+  right: -12rem;
+  top: 34%;
+  background: color-mix(in oklab, var(--safe) 8%, transparent);
+  animation: k-drift-b 60s var(--ease-in-out-soft) infinite alternate;
+}
+
+.k-drift-c {
+  width: 34rem;
+  height: 34rem;
+  left: 32%;
+  bottom: -16rem;
+  background: color-mix(in oklab, var(--caution) 6%, transparent);
+  animation: k-drift-c 54s var(--ease-in-out-soft) infinite alternate;
+}
+
+@keyframes k-drift-a {
+  to {
+    transform: translate3d(10rem, 8rem, 0) scale(1.18);
+  }
+}
+
+@keyframes k-drift-b {
+  to {
+    transform: translate3d(-9rem, -7rem, 0) scale(1.12);
+  }
+}
+
+@keyframes k-drift-c {
+  to {
+    transform: translate3d(7rem, -9rem, 0) scale(1.22);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Presentation scroll — landing page only (it toggles .k-snap-page on
+   <html>). proximity, never mandatory: a panic-state user must always be
+   able to stop between slides.
+   -------------------------------------------------------------------------- */
+
+html.k-snap-page {
+  scroll-snap-type: y proximity;
+}
+
+.k-snap-slide {
+  scroll-snap-align: start;
+}
+
+.k-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+.k-hash {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  line-height: 1.7;
+  letter-spacing: 0.04em;
+  word-break: break-all;
+}
+
+/* Safe areas for installed PWA on notched devices. */
+.k-safe-bottom {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+.k-safe-top {
+  padding-top: env(safe-area-inset-top, 0px);
+}
+
+/* Thin scrollbars, desktop only. */
+@media (pointer: fine) {
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: color-mix(in oklab, var(--ink) 20%, transparent)
+      transparent;
+  }
+  *::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  *::-webkit-scrollbar-thumb {
+    background: color-mix(in oklab, var(--ink) 20%, transparent);
+    border-radius: 8px;
+  }
+  *::-webkit-scrollbar-track {
+    background: transparent;
+  }
+}
+
+/* ==========================================================================
+   PRINT — the exported incident report
+   Government-report aesthetic: black on white, no app chrome, no theme.
+   ========================================================================== */
+
+@media print {
+  @page {
+    size: A4;
+    margin: 18mm 16mm;
+  }
+
+  html,
+  body {
+    background: #fff !important;
+    color: #000 !important;
+    font-size: 11pt;
+    line-height: 1.5;
+  }
+
+  .k-no-print {
+    display: none !important;
+  }
+
+  .k-print-only {
+    display: block !important;
+  }
+
+  .k-print-sheet {
+    box-shadow: none !important;
+    border: none !important;
+    background: #fff !important;
+    color: #000 !important;
+    padding: 0 !important;
+    max-width: none !important;
+  }
+
+  .k-print-sheet h1,
+  .k-print-sheet h2,
+  .k-print-sheet h3 {
+    font-family: var(--font-sans);
+    color: #000 !important;
+  }
+
+  .k-print-rule {
+    border-top: 1.5pt solid #000 !important;
+  }
+
+  .k-print-hairline {
+    border-top: 0.5pt solid #666 !important;
+  }
+
+  .k-print-mono {
+    font-family: var(--font-mono);
+    font-size: 8.5pt;
+    word-break: break-all;
+  }
+
+  .k-print-avoid-break {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  a {
+    color: #000 !important;
+    text-decoration: none !important;
+  }
+}
+
+.k-print-only {
+  display: none;
+}
